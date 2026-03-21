@@ -113,7 +113,7 @@ const ProjectsShowcase = () => {
       try {
         const rail = railRef.current;
         const leftCopy = leftCopyRef.current;
-        if (!rail || !leftCopy) return;
+        if (!rail) return;
 
         const start = isMobile ? "top -5%" : "top top";
         const { gsap } = gsapContext;
@@ -133,7 +133,7 @@ const ProjectsShowcase = () => {
 
         tl.to(rail, { x: () => -(rail.scrollWidth - rail.clientWidth) });
 
-        if (!isMobile) {
+        if (!isMobile && leftCopy) {
           tl.to(
             leftCopy,
             {
