@@ -176,7 +176,7 @@ export default function HeroSection() {
       ); // etiqueta de control
 
       heroTimeline.fromTo(
-        ".hero__logo-img",
+        ".hero__logo-fade",
         {
           opacity: 1,
         },
@@ -184,6 +184,7 @@ export default function HeroSection() {
           opacity: 0,
           duration: 4,
           transformOrigin: "center center",
+          immediateRender: false,
         },
         "fadeStart"
       );
@@ -200,7 +201,6 @@ export default function HeroSection() {
             scale: 1.05, // zoom suave
             x: () => window.innerWidth * 0.02,
             duration: 10,
-            transformOrigin: "center center",
             ease: "none", // 🔹 importante: sin easing, responde lineal al scroll
           },
           "fadeStart"

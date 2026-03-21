@@ -90,7 +90,7 @@ const HeroLogo = () => {
   return (
     <HeroLogoWrapper>
       <HeroLogoTop />
-      <HeroLogoContainer>
+      <HeroLogoContainer className="hero__logo-fade">
         <HeroLogoIn>
           <HeroLogoLottie>
             <HeroLogoImgContent>
