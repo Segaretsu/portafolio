@@ -14,6 +14,7 @@ const GlobalStyle = createGlobalStyle`
 
 import { useRouter } from "next/router";
 import { defaultMeta, metaByRoute } from "src/util/metaConfig";
+import { GSAPProvider } from "src/context/GSAPProvider";
 
 /**
  * Método que genera metricas importantes del proyecto
@@ -29,7 +30,7 @@ function MyApp({ Component, pageProps }) {
 
   const meta = metaByRoute[path] || defaultMeta;
   return (
-    <>
+    <GSAPProvider>
       <GlobalStyle />
       <Head>
         <meta charSet="utf-8" />
@@ -57,7 +58,7 @@ function MyApp({ Component, pageProps }) {
         <meta name="twitter:image:alt" content="Preview website image" />
       </Head>
       <Component {...pageProps} />
-    </>
+    </GSAPProvider>
   );
 }
 

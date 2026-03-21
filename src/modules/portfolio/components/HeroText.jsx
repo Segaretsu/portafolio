@@ -59,6 +59,7 @@ const HeroTextContainerDesktop = styled.div`
   flex-direction: column;
   width: 920px;
   position: relative;
+  visibility: hidden;
 
   @media (max-width: 767.98px) {
     width: 342px;
@@ -99,6 +100,7 @@ const HeroValuePropsItem = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  visibility: hidden;
 
   @media (max-width: 767.98px) {
     align-items: flex-start;

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import portfolioProjects from "@constants/portfolio";
-import { createHorizontalScroll } from "../../util/animations";
 import CardWrapper from "@components/commons/CardWrapper";
 import useIsMobile from "@modules/shared/hooks/useIsMobile";
+import { useGSAPContext } from "src/context/GSAPProvider";
 
 const Section = styled.section`
   min-height: 100vh;
@@ -102,75 +102,67 @@ const ProjectsShowcase = () => {
 
   const isMobile = useIsMobile();
 
+  const gsapContext = useGSAPContext();
+
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !gsapContext) return;
 
     let cleanup = () => {};
 
-    const setup = async () => {
+    const setup = () => {
       try {
-        // Solo activar el scroll horizontal con GSAP en desktop
-        //if (window.innerWidth < 1024) return;
-
         const rail = railRef.current;
         const leftCopy = leftCopyRef.current;
         if (!rail || !leftCopy) return;
 
-        const totalWidth = rail.scrollWidth;
-        const viewport = rail.clientWidth;
-        const scrollDistance = totalWidth - viewport;
-
-        if (scrollDistance <= 0) return;
-
         const start = isMobile ? "top -5%" : "top top";
+        const { gsap } = gsapContext;
 
-        // Usar la utilidad de animación para el scroll horizontal
-        const tl = await createHorizontalScroll(
-          sectionRef.current,
-          rail,
-          {
+        const tl = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: sectionRef.current,
             start,
-            end: `+=${scrollDistance + window.innerHeight * 0.3}`,
+            end: () => `+=${rail.scrollWidth - rail.clientWidth + window.innerHeight * 0.3}`,
+            scrub: true,
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
           },
-          (timeline) => {
-            // Añadir animación para que el texto izquierdo se mueva hacia la izquierda
-            // en el mismo timeline, para que estén perfectamente sincronizados
-            if (isMobile) {
-              return;
-            }
-            timeline.to(
-              leftCopy,
-              {
-                x: () => -scrollDistance * 0.3, // Se mueve 30% de la distancia del scroll
-                ease: "none",
-              },
-              0
-            ); // Comienza al mismo tiempo que el scroll horizontal
-          }
-        );
+        });
 
-        if (tl) {
-          animationRef.current = tl;
-          cleanup = () => {
-            tl.kill();
-          };
+        tl.to(rail, { x: () => -(rail.scrollWidth - rail.clientWidth) });
+
+        if (!isMobile) {
+          tl.to(
+            leftCopy,
+            {
+              x: () => -(rail.scrollWidth - rail.clientWidth) * 0.3, // dinámico
+              ease: "none",
+            },
+            0
+          );
         }
+
+        animationRef.current = tl;
+        cleanup = () => {
+          tl.kill();
+        };
       } catch (e) {
         console.warn("Horizontal scroll not initialized:", e);
       }
     };
 
-    // Delay para asegurar que el DOM esté listo
-    const timer = setTimeout(setup, 100);
+    // Inicializar sin delay para evitar layouts shifts cuando el usuario ya ha empezado a hacer scroll
+    setup();
 
     return () => {
-      clearTimeout(timer);
       if (animationRef.current) {
         animationRef.current.kill();
       }
       cleanup();
     };
-  }, []);
+  }, [gsapContext, isMobile]);
 
   return (
     <>
@@ -194,7 +186,7 @@ const ProjectsShowcase = () => {
           <RightRail>
             <Cards ref={railRef}>
               <ShowNotTellMobile key={"ejempl"}>
-                <LeftCopy ref={leftCopyRef}>
+                <LeftCopy>
                   <h2>
                     Show
                     <br />

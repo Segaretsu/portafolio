@@ -20,12 +20,22 @@ const StyledQualification = StyledComponents.section`
         }
     }
 
+    .qualification__sections {
+        display: grid;
+    }
+
     [data-content] {
-        display: none;
+        grid-area: 1 / 1;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
     }
 
     .qualification__active[data-content] {
-        display: block;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
     }
 `
 
@@ -68,13 +78,13 @@ const Qualification = () => {
 
             <div className="qualification__container container">
                 <div className="qualification__tabs">
-                    <ButtonQualification className="qualification__button button--flex qualification__active" data-target="#education">
-                        <i className="uil uil-graduation-cap qualification__icon"></i>
-                        Education
-                    </ButtonQualification>
-                    <ButtonQualification className="qualification__button button--flex" data-target="#work">
+                    <ButtonQualification className="qualification__button button--flex qualification__active" data-target="#work">
                         <i className="uil uil-briefcase-alt qualification__icon"></i>
                         Work
+                    </ButtonQualification>
+                    <ButtonQualification className="qualification__button button--flex" data-target="#education">
+                        <i className="uil uil-graduation-cap qualification__icon"></i>
+                        Education
                     </ButtonQualification>
                     <ButtonQualification className="qualification__button button--flex" data-target="#awards">
                         <i className="uil uil-award qualification__icon"></i>
@@ -82,14 +92,14 @@ const Qualification = () => {
                     </ButtonQualification>
                 </div>
                 <div className="qualification__sections">
-                    <div className="qualification__content qualification__active" data-content id="education">
-                        {Education.map((qualification, index) => {
-                            return <QualificationContent key={index} qualification={qualification} index={index} size={Education.length} />
-                        })}
-                    </div>
-                    <div className="qualification__content" data-content id="work">
+                    <div className="qualification__content qualification__active" data-content id="work">
                         {Works.map((work, index) => {
                             return <QualificationContent key={index} qualification={work} index={index} size={Works.length} />
+                        })}
+                    </div>
+                    <div className="qualification__content" data-content id="education">
+                        {Education.map((qualification, index) => {
+                            return <QualificationContent key={index} qualification={qualification} index={index} size={Education.length} />
                         })}
                     </div>
                     <div className="qualification__content" data-content id="awards">

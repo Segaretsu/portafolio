@@ -7,6 +7,7 @@ import { useRef } from "react";
 import HeroText from "@modules/portfolio/components/HeroText";
 import AboutContent from "@modules/portfolio/components/AboutContent";
 import useIsMobile from "@modules/shared/hooks/useIsMobile";
+import { useGSAPContext } from "src/context/GSAPProvider";
 
 const HeroWrapper = styled.section`
   @supports (aspect-ratio: 1) {
@@ -53,19 +54,20 @@ const DarkOverlay = styled.div`
 export default function HeroSection() {
   const heroRef = useRef(null);
   const isMobile = useIsMobile();
+  const gsapContext = useGSAPContext();
 
   useGSAP(() => {
-    const animate = async () => {
-      const { gsap } = await import("gsap");
-      const { SplitText } = await import("gsap/all");
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+    if (!gsapContext) return;
+    const { gsap, ScrollTrigger, SplitText } = gsapContext;
 
-      gsap.registerPlugin(ScrollTrigger, SplitText);
+    const animate = () => {
 
       const start = isMobile ? "top top" : "top top";
 
       const titleSplit = new SplitText(".hero__title", { type: "words" });
       const subtitleSplit = new SplitText(".hero_subtitles", { type: "lines" });
+
+      gsap.set(".hero__title, .hero_subtitles", { visibility: "visible" });
 
       // 🔹 Animaciones al cargar (sin scroll)
       const introTimeline = gsap.timeline({ defaults: { ease: "expo.out" } });
@@ -285,7 +287,7 @@ export default function HeroSection() {
     };
 
     animate();
-  });
+  }, { dependencies: [gsapContext, isMobile] });
 
   return (
     <HeroWrapper ref={heroRef} id="hero">
