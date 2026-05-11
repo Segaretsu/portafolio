@@ -8,9 +8,7 @@ const HomeBlogView = () => {
             <div className="section">
                 <HomeTest />
             </div>
-            <div className='container section'></div>
             <SuscribeLayout campaign={'newsletter'} />
-            <div className='container section'></div>
         </BlogLayout>
     )
 }

@@ -9,7 +9,7 @@ export class Article {
     createdAt;
     mainImage;
     mainTheme;
-
+    readingTime; // minutos de lectura
 
     constructor() {
         this.title = "";
@@ -20,6 +20,7 @@ export class Article {
         this.createdAt = "";
         this.mainImage = "";
         this.mainTheme = "";
+        this.readingTime = null;
     }
 
     withTitle(title) {
@@ -62,6 +63,11 @@ export class Article {
         return this;
     }
 
+    withReadingTime(readingTime) {
+        this.readingTime = readingTime;
+        return this;
+    }
+
     build() {
         return {
             title: this.title,
@@ -72,6 +78,7 @@ export class Article {
             sortDescription: this.sortDescription,
             highlight: this.highlight,
             path: this.path,
+            readingTime: this.readingTime,
         }
     }
 }
@@ -85,6 +92,7 @@ export const articles = [
         .withMainTheme("JavaScript")
         .withSortDescription("Los snippets son códigos o textos que guardamos y queremos reutilizar de forma ágil en ...")
         .withPath(blogRoutes.articles.snippets)
+        .withReadingTime(5)
         .build(),
 
     new Article()
@@ -93,8 +101,9 @@ export const articles = [
         .withDescription("Si quieres destacar como programador o desarrollador, debes aprender los principios SOLID, te llevaran un paso más adelante para elevar tu nivel, y elevar tu seniority, así que comencemos.")
         .withMainImage("/images/articles/solid/solid_0_portada.webp")
         .withMainTheme("Principios")
-        .withSortDescription("Si quieres destacar como programador o desarrollador, debes aprender los principios SOLID, te llevaran un paso más adelante para elevar tu nivel, y elevar tu seniority...")
+        .withSortDescription("Si quieres destacar como programador o desarrollador, debes aprender los principios SOLID, te llevarán un paso más adelante para elevar tu nivel y tu seniority...")
         .withPath(blogRoutes.articles.solid)
         .withHighlight(true)
+        .withReadingTime(8)
         .build(),
 ]

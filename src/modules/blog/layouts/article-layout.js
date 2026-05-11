@@ -77,15 +77,18 @@ const StyleContainer = styled.section`
 `
 
 const ArticleLayout = ({ children }) => {
-    return (<StyleContainer className="section">
-        <div className="container grid">
-            {children}
-            <br />
-            <br />
-            <hr />
+    return (
+        <>
+            <StyleContainer className="section">
+                <div className="container grid">
+                    {children}
+                    <br />
+                    <hr />
+                </div>
+            </StyleContainer>
             <SuscribeLayout />
-        </div>
-    </StyleContainer>)
+        </>
+    )
 }
 
 export default ArticleLayout;
